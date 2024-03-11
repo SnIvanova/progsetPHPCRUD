@@ -36,10 +36,16 @@ class UserDTO{
         return $stm->rowCount();
     }
     public function updateUser(array $user){
-        var_dump($user);
         $sql = "UPDATE users SET firstname = :firstname, lastname = :lastname, email = :email, password = :password, admin = :admin WHERE id = :id";
         $stm = $this->conn->prepare($sql);
-        $stm->execute(['firstname' => $user['firstname'], 'lastname' => $user['lastname'], 'email' => $user['email'], 'password' => $user['password'], 'admin' => $user['admin']]);
+        $stm->execute([
+            'firstname' => $user['firstname'],
+            'lastname' => $user['lastname'],
+            'email' => $user['email'],
+            'password' => $user['password'],
+            'admin' => $user['admin'],
+            'id' => $user['id'], 
+        ]);
         return $stm->rowCount();
     }
     public function deleteUser(int $id){

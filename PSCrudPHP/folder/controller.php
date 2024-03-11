@@ -2,11 +2,11 @@
 
 require 'db.php';
 
-if (session_status() == PHP_SESSION_NONE) {
+/* if (session_status() == PHP_SESSION_NONE) { */
     session_start();
-}
+/* } */
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
+/* if ($_SERVER["REQUEST_METHOD"] == "POST") {
    
     if (isset($_POST['remember_me'])) {
         setcookie('remember_me', '1', time() + (86400 * 30), "/"); // 86400 = 1 day
@@ -16,8 +16,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             setcookie('remember_me', '', time() - 3600, "/"); 
         }
     }
-
-print_r($_REQUEST);
+*/
+print_r($_REQUEST); 
 
 
 $regexemail = '/^((?!\.)[\w\-_.]*[^.])(@\w+)(\.\w+(\.\w+)?[^.\W])$/m';
@@ -48,4 +48,4 @@ if($row = $res->fetch_assoc()) {
     $_SESSION['error'] = 'Email e Password errati!!!';
     header('Location: login.php');
 }
-}
+/* } */

@@ -12,7 +12,31 @@ $conn = $PDOConn->getConnection();
 
 $userDTO = new UserDTO($conn);
 
-if (isset($_REQUEST['firstname'])) {
+if (isset($_REQUEST['action']) && $_REQUEST['action'] == 'edit' && isset($_REQUEST['id'])) {
+    $firstname = $_REQUEST['firstname'] ?? '';
+    $lastname = $_REQUEST['lastname'] ?? '';
+    $email = $_REQUEST['email'] ?? '';
+    $password = $_REQUEST['password'] ?? '';
+    $admin = $_REQUEST['admin'] ?? '';
+    $id = intval($_REQUEST['id']);
+
+    $result = $userDTO->updateUser([
+        'id' => $id,
+        'firstname' => $firstname,
+        'lastname' => $lastname,
+        'email' => $email,
+        'password' => $password,
+        'admin' => $admin,
+    ]);
+
+    if ($result) {
+        header('Location: index.php?message=User Updated Successfully');
+        exit;
+    } else {
+        echo "An error occurred during the update.";
+    }
+} elseif (!isset($_REQUEST['action']) && isset($_REQUEST['firstname'])) {
+    // This branch is for creating a new user
     $firstname = $_REQUEST['firstname'];
     $lastname = $_REQUEST['lastname'];
     $email = $_REQUEST['email'];
@@ -26,34 +50,6 @@ if (isset($_REQUEST['firstname'])) {
         'password' => $password,
         'admin' => $admin
     ]);
-}
-
-if (isset($_REQUEST['id']) && $_REQUEST['action'] == 'edit' && isset($_REQUEST['submit'])) {
-    $firstname = $_REQUEST['firstname'] ?? '';
-    $lastname = $_REQUEST['lastname'] ?? '';
-    $email = $_REQUEST['email'] ?? '';
-    $password = $_REQUEST['password'] ?? '';
-    $admin = $_REQUEST['admin'] ?? '';
-    $id = intval($_REQUEST['id']);
-
-    // Assuming you have an updateUser method to handle user updates.
-    $result = $userDTO->updateUser([
-        'id' => $id,
-        'firstname' => $firstname,
-        'lastname' => $lastname,
-        'email' => $email,
-        'password' => $password,
-        'admin' => $admin,
-    ]);
-
-    if ($result) {
-        // Update was successful, redirect or notify the user accordingly.
-        header('Location: index.php?message=User Updated Successfully');
-        exit;
-    } else {
-        // Handle error in update.
-        echo "An error occurred during the update.";
-    }
 }
 
 if (isset($_REQUEST['id']) && $_REQUEST['action'] == 'delete') {
@@ -90,6 +86,7 @@ if(!isset($_SESSION['userLogin']) && isset($_COOKIE["useremail"]) && isset($_COO
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="assets/css/style.css">
+   
 </head>
 
 <body>
@@ -234,54 +231,76 @@ if(!isset($_SESSION['userLogin']) && isset($_COOKIE["useremail"]) && isset($_COO
     </div>
 
 
-    <!-- modale per la modifica -->
-    <div class="modal fade" id="modificaUtente" tabindex="-1" aria-labelledby="modificaUtenteLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="modificaUtenteLabel">Modifica Utente</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form method="post" action="index.php">
-                    <input type="hidden" name="id" id="userId" value=""> 
-                    <input type="hidden" name="action" value="edit">
-                        <div class="mb-3">
-                            <label for="firstname" class="form-label">Name</label>
-                            <input name="firstname" type="text" class="form-control" id="firstname"
-                                aria-describedby="firstname">
-                        </div>
-                        <div class="mb-3">
-                            <label for="lastname" class="form-label">Surname</label>
-                            <input name="lastname" type="text" class="form-control" id="lastname"
-                                aria-describedby="lastname">
-                        </div>
-                        <div class="mb-3">
-                            <label for="email" class="form-label">Email</label>
-                            <input name="email" type="email" class="form-control" id="email" aria-describedby="emailHelp">
-                        </div>
-                        <div class="mb-3">
-                            <label for="password" class="form-label">Password</label>
-                            <input name="password" type="password" class="form-control" id="password">
-                        </div>
-                        <div class="mb-3">
-                            <label for="admin" class="form-label">Admin</label>
-                            <input name="admin" type="number" class="form-control" id="admin" aria-describedby="admin"
-                                min="0" max="1">
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <a href="index.php?action=edit&id=<?= $record["id"] ?>" type="submit"
-                                class="btn btn-primary">Save changes</a>
-                        </div>
-                    </form>
-                </div>
+    <!-- modify -->
+<div class="modal fade" id="modificaUtente" tabindex="-1" aria-labelledby="modificaUtenteLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="modificaUtenteLabel">Modify User</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form method="post" action="index.php">
+                <input type="hidden" name="id" id="userId" value=""> 
+                <input type="hidden" name="action" value="edit">
+                    <div class="mb-3">
+                        <label for="firstname" class="form-label">Name</label>
+                        <input name="firstname" type="text" class="form-control" id="firstname"
+                            aria-describedby="firstname">
+                    </div>
+                    <div class="mb-3">
+                        <label for="lastname" class="form-label">Lastname</label>
+                        <input name="lastname" type="text" class="form-control" id="lastname"
+                            aria-describedby="lastname">
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <input name="email" type="email" class="form-control" id="email" aria-describedby="emailHelp">
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Password</label>
+                        <input name="password" type="password" class="form-control" id="password">
+                    </div>
+                    <div class="mb-3">
+                        <label for="admin" class="form-label">Admin</label>
+                        <input name="admin" type="number" class="form-control" id="admin" aria-describedby="admin"
+                            min="0" max="1">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Save changes</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
-
+</div>
+       
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+$(document).ready(function() {
+    $('#modificaUtente').on('show.bs.modal', function(event) {
+        var button = $(event.relatedTarget); 
+        var id = button.data('id');
+        var firstname = button.data('firstname');
+        var lastname = button.data('lastname');
+        var email = button.data('email');
+      
+        var admin = button.data('admin');
+        
+        var modal = $(this);
+        modal.find('.modal-body #userId').val(id);
+        modal.find('.modal-body #firstname').val(firstname);
+        modal.find('.modal-body #lastname').val(lastname);
+        modal.find('.modal-body #email').val(email);
+        modal.find('.modal-body #password').val(password); 
+        modal.find('.modal-body #admin').val(admin);
+    });
+});
+</script>
+
 </body>
 
 </html>
