@@ -1,7 +1,7 @@
 body {
 
     width: 100% !important;
-    height: 100% !important;
+    height: 100vw !important;
     margin: 0 !important;
     padding: 0 !important;
     box-sizing: border-box !important;

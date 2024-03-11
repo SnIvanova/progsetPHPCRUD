@@ -1,6 +1,7 @@
 <?php
 
 namespace DB {
+    
     class DB_PDO{
         private $conn;
         private static $instance = null;
