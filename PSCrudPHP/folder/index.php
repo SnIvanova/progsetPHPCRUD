@@ -159,10 +159,18 @@ if(!isset($_SESSION['userLogin']) && isset($_COOKIE["useremail"]) && isset($_COO
                                     <?= $record["admin"] ? '<span class="badge bg-success">Yes</span>' : '<span class="badge bg-secondary">No</span>' ?>
                                 </td>
                                 <td class="d-flex justify-content-center">
-                                    <a href="index.php?action=edit&id=<?= $record["id"] ?>" 
-                                    class="btn btn-outline-warning btn-sm mx-1" 
-                                    title="Edit">
-                                    <i class="bi bi-pencil-square"></i></a>
+                                    <button class="btn btn-outline-warning btn-sm mx-1 editUserButton" data-bs-toggle="modal" data-bs-target="#modificaUtente" 
+                                            data-id="<?= $record["id"] ?>"
+                                            data-firstname="<?= htmlspecialchars($record["firstname"]) ?>"
+                                            data-lastname="<?= htmlspecialchars($record["lastname"]) ?>"
+                                            data-email="<?= htmlspecialchars($record["email"]) ?>"
+                                            data-password="<?= htmlspecialchars($record["password"]) ?>"
+                                            data-admin="<?= $record["admin"] ?>"
+                                            title="Edit">
+                                        <i class="bi bi-pencil-square"></i>
+                                    </button>
+
+
                                     <a href="index.php?action=delete&id=<?= $record["id"] ?>" 
                                     class="btn btn-outline-danger btn-sm mx-1"
                                     onclick="return confirm('Are you sure you want to delete this user?');" 
@@ -236,6 +244,8 @@ if(!isset($_SESSION['userLogin']) && isset($_COOKIE["useremail"]) && isset($_COO
                 </div>
                 <div class="modal-body">
                     <form method="post" action="index.php">
+                    <input type="hidden" name="id" id="userId" value=""> 
+                    <input type="hidden" name="action" value="edit">
                         <div class="mb-3">
                             <label for="firstname" class="form-label">Name</label>
                             <input name="firstname" type="text" class="form-control" id="firstname"
