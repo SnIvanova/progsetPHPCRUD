@@ -66,7 +66,7 @@ $res = $userDTO->getAll();
 // logout
 session_start();
 if(!isset($_SESSION['userLogin']) && isset($_COOKIE["useremail"]) && isset($_COOKIE["userpassword"])) {
-  header('Location: http://localhost/Progetto-settimana-4_back-end/controller.php?email='.$_COOKIE["useremail"].'&password='.$_COOKIE["userpassword"]);
+  header('Location: controller.php?email='.$_COOKIE["useremail"].'&password='.$_COOKIE["userpassword"]);
 } else if(!isset($_SESSION['userLogin'])) {
   //print_r($_SESSION['userLogin']);
   header('Location: login.php');
@@ -128,19 +128,18 @@ if(!isset($_SESSION['userLogin']) && isset($_COOKIE["useremail"]) && isset($_COO
                     <h2 class="h5 card-title mb-0">User Management</h2>
                 </div>
                 <div class="table-responsive">
-                    <table class="table table-hover align-middle">
+                    <table class="table table-hover align-middle table-striped m-3 justify-content-center">
                         <thead class="bg-primary table-light">
                             <tr>
                         <th scope="col">ID</th>
                         <th scope="col">Name</th>
                         <th scope="col">Surname</th>
                         <th scope="col">Email</th>
-                        <!-- <th scope="col">Password</th> -->
                         <th scope="col">Admin</th>
                         <th scope="col" class="text-center">Actions</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody >
                     <?php if ($res): ?>
                         <?php foreach ($res as $record): ?>
                             <tr>
@@ -148,14 +147,10 @@ if(!isset($_SESSION['userLogin']) && isset($_COOKIE["useremail"]) && isset($_COO
                                 <td><?= htmlspecialchars($record["firstname"]) ?></td>
                                 <td><?= htmlspecialchars($record["lastname"]) ?></td>
                                 <td><?= htmlspecialchars($record["email"]) ?></td>
-                               <!--  <td class='td-password'
-                                style="max-width: 100px; overflow: hidden; text-overflow: ellipsis;">
-                                <?= htmlspecialchars($record["password"]) ?>
-                                </td> -->
                                 <td class="text-center">
-                                    <?= $record["admin"] ? '<span class="badge bg-success">Yes</span>' : '<span class="badge bg-secondary">No</span>' ?>
+                                    <?= $record["admin"] ? '<span class="badge bg-success rounded-pill">Yes</span>' : '<span class="badge bg-secondary rounded-pill">No</span>' ?>
                                 </td>
-                                <td class="d-flex justify-content-center">
+                                <td class="d-flex flex-column justify-content-center align-items-center">
                                     <button class="btn btn-outline-warning btn-sm mx-1 editUserButton" data-bs-toggle="modal" data-bs-target="#modificaUtente" 
                                             data-id="<?= $record["id"] ?>"
                                             data-firstname="<?= htmlspecialchars($record["firstname"]) ?>"
@@ -168,11 +163,14 @@ if(!isset($_SESSION['userLogin']) && isset($_COOKIE["useremail"]) && isset($_COO
                                     </button>
 
 
-                                    <a href="index.php?action=delete&id=<?= $record["id"] ?>" 
-                                    class="btn btn-outline-danger btn-sm mx-1"
-                                    onclick="return confirm('Are you sure you want to delete this user?');" 
-                                    title="Delete">
-                                    <i class="bi bi-trash"></i></a>
+                                    <form action="index.php" method="post" 
+                                    onsubmit="return confirm('Are you sure you want to delete this user?');" class="d-inline">
+                                        <input type="hidden" name="action" value="delete">
+                                        <input type="hidden" name="id" value="<?= htmlspecialchars($record["id"]) ?>">
+                                        <button type="submit" class="btn btn-outline-danger btn-sm mx-1" title="Delete User" aria-label="Delete User">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </form>
                                 </td>
                             </tr>
                         <?php endforeach; ?>

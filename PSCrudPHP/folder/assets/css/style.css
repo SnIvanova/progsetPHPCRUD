@@ -6,7 +6,8 @@ body {
     padding: 0 !important;
     box-sizing: border-box !important;
     font-family: "Montserrat", sans-serif !important;
-    background-color: #2265c9 !important;
+    background: linear-gradient(135deg, #6A1B9A, #00BCD4)!important;
+    background-repeat: no-repeat!important;
 }
 
 /* index.php */
@@ -32,7 +33,7 @@ body {
 }
 
 .table {
-    margin-top: 3rem !important;
+    
     max-width: 80% !important;
     border-radius: 15px !important;
     overflow: hidden !important;
