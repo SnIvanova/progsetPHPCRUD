@@ -36,7 +36,7 @@ if (isset($_REQUEST['action']) && $_REQUEST['action'] == 'edit' && isset($_REQUE
         echo "An error occurred during the update.";
     }
 } elseif (!isset($_REQUEST['action']) && isset($_REQUEST['firstname'])) {
-    // This branch is for creating a new user
+   
     $firstname = $_REQUEST['firstname'];
     $lastname = $_REQUEST['lastname'];
     $email = $_REQUEST['email'];
