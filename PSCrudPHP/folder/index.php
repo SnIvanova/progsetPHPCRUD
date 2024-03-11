@@ -28,32 +28,32 @@ if (isset($_REQUEST['firstname'])) {
     ]);
 }
 
-if (isset($_REQUEST['id']) && $_REQUEST['action'] == 'edit') {
-    // Initialize variables to avoid undefined variable warnings
-    $firstname = $lastname = $email = $password = $admin = "";
-
-    // Check if keys exist before using them
-    if (isset($_REQUEST['firstname'])) {
-        $firstname = $_REQUEST['firstname'];
-    }
-    if (isset($_REQUEST['lastname'])) {
-        $lastname = $_REQUEST['lastname'];
-    }
-    if (isset($_REQUEST['email'])) {
-        $email = $_REQUEST['email'];
-    }
-    if (isset($_REQUEST['password'])) {
-        $password = $_REQUEST['password'];
-    }
-    if (isset($_REQUEST['admin'])) {
-        $admin = $_REQUEST['admin'];
-    }
-    
+if (isset($_REQUEST['id']) && $_REQUEST['action'] == 'edit' && isset($_REQUEST['submit'])) {
+    $firstname = $_REQUEST['firstname'] ?? '';
+    $lastname = $_REQUEST['lastname'] ?? '';
+    $email = $_REQUEST['email'] ?? '';
+    $password = $_REQUEST['password'] ?? '';
+    $admin = $_REQUEST['admin'] ?? '';
     $id = intval($_REQUEST['id']);
 
-    // Debugging output (consider removing or logging elsewhere in production)
-    echo $id;
-    var_dump($firstname);
+    // Assuming you have an updateUser method to handle user updates.
+    $result = $userDTO->updateUser([
+        'id' => $id,
+        'firstname' => $firstname,
+        'lastname' => $lastname,
+        'email' => $email,
+        'password' => $password,
+        'admin' => $admin,
+    ]);
+
+    if ($result) {
+        // Update was successful, redirect or notify the user accordingly.
+        header('Location: index.php?message=User Updated Successfully');
+        exit;
+    } else {
+        // Handle error in update.
+        echo "An error occurred during the update.";
+    }
 }
 
 if (isset($_REQUEST['id']) && $_REQUEST['action'] == 'delete') {
