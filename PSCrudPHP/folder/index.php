@@ -135,7 +135,7 @@ if(!isset($_SESSION['userLogin']) && isset($_COOKIE["useremail"]) && isset($_COO
                         <th scope="col">Name</th>
                         <th scope="col">Surname</th>
                         <th scope="col">Email</th>
-                        <th scope="col">Password</th>
+                        <!-- <th scope="col">Password</th> -->
                         <th scope="col">Admin</th>
                         <th scope="col" class="text-center">Actions</th>
                     </tr>
@@ -148,10 +148,10 @@ if(!isset($_SESSION['userLogin']) && isset($_COOKIE["useremail"]) && isset($_COO
                                 <td><?= htmlspecialchars($record["firstname"]) ?></td>
                                 <td><?= htmlspecialchars($record["lastname"]) ?></td>
                                 <td><?= htmlspecialchars($record["email"]) ?></td>
-                                <td class='td-password'
+                               <!--  <td class='td-password'
                                 style="max-width: 100px; overflow: hidden; text-overflow: ellipsis;">
                                 <?= htmlspecialchars($record["password"]) ?>
-                                </td>
+                                </td> -->
                                 <td class="text-center">
                                     <?= $record["admin"] ? '<span class="badge bg-success">Yes</span>' : '<span class="badge bg-secondary">No</span>' ?>
                                 </td>
